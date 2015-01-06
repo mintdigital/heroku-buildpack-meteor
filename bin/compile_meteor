@@ -42,9 +42,7 @@ build() {
     # can't 'build' with these platforms enabled, it looks like
     meteor remove-platform ios
     meteor remove-platform android
-    set -x # echo meteor build's progress
-    meteor build app_build
-    set +x # turn off command output echoing
+    meteor build app_build --directory
   )
 }
 
