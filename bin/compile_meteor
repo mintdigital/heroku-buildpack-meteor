@@ -9,7 +9,7 @@ set -e            # fail fast
 
 BUILD_DIR=$1
 CACHE_DIR=$2
-METEOR_HOME=$BUILD_DIR/.meteor
+METEOR_HOME=$HOME/.meteor
 PATH=$METEOR_HOME:$PATH
 
 # Unfortunately heroku buildpacks don't let you pass parameters
@@ -30,7 +30,7 @@ fetch_meteor() {
 
   echo "Unpacking meteor"
   [ ! -d "$METEOR_HOME" ] && mkdir -p "$METEOR_HOME"
-  tar -xzf "$PACKAGE" -C "$BUILD_DIR"
+  tar -xzf "$PACKAGE" -C "$HOME"
   # bomb out if it didn't work, eg no net
   test -x "${METEOR_HOME}/meteor"
 }
