@@ -8,5 +8,5 @@ cat <<-YAML
 addons:
   - mongolab:sandbox
 default_process_types:
-  web: PATH=.meteor/:$PATH MONGO_URL=\$MONGOLAB_URI bin/node "$1/app_build/main.js"
+  web: PATH=.meteor/:$PATH MONGO_URL=\$MONGOLAB_URI bin/node "$1/app_build/bundle/main.js"
 YAML
