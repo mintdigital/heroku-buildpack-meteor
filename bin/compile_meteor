@@ -39,9 +39,6 @@ build() {
   (
     cd $BUILD_DIR
     echo "Building meteor bundle"
-    ##DEBUGGING
-    echo `ls -a`
-    ##END DEBUGGING
     # can't 'build' with these platforms enabled, it looks like
     meteor remove-platform ios
     meteor remove-platform android
