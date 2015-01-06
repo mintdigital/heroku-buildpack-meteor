@@ -26,7 +26,7 @@ fetch_meteor() {
   [ ! -d "$METEOR_HOME" ] && mkdir -p "$METEOR_HOME"
   tar -xzf "$PACKAGE" -C "$BUILD_DIR"
   # bomb out if it didn't work, eg no net
-  test -x "${$METEOR_HOME}/meteor"
+  test -x "${METEOR_HOME}/meteor"
 }
 
 build() {
