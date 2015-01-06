@@ -2,8 +2,8 @@
 
 BUILD_DIR=$1
 CACHE_DIR=$2
-METEOR_HOME=$BUILD_DIR/.meteor/local
-PATH=$METEOR_HOME/usr/bin:$METEOR_HOME/usr/lib/meteor/bin:$PATH
+METEOR_HOME=$BUILD_DIR/.meteor
+PATH=$METEOR_HOME:$PATH
 
 # Unfortunately heroku buildpacks don't let you pass parameters
 # to this script, so if you want to change the version of meteor,
@@ -16,15 +16,16 @@ fetch_meteor() {
     return
   fi
 
-
-  PACKAGE=meteor_${METEOR_VERSION}-1_amd64.deb
-
-  echo "Fetching meteor deb package"
-  curl -o "$CACHE_DIR/$PACKAGE" "http://d3sqy0vbqsdhku.cloudfront.net/${PACKAGE}"
+  echo "Fetching meteor package"
+  TARBALL_URL="https://d3sqy0vbqsdhku.cloudfront.net/packages-bootstrap/${METEOR_VERSION}/meteor-bootstrap-os.linux.x86_64.tar.gz"
+  PACKAGE="$CACHE_DIR/meteor-$METEOR_VERSION.tar.gz"
+  curl -o "$PACKAGE" "$TARBALL_URL"
 
   echo "Unpacking meteor"
   [ ! -d "$METEOR_HOME" ] && mkdir -p "$METEOR_HOME"
-  ar p "$CACHE_DIR/$PACKAGE" data.tar.gz | tar -C "$METEOR_HOME" -zxf -
+  tar -xzf "$PACKAGE" -C "$BUILD_DIR" -o $
+  # bomb out if it didn't work, eg no net
+  test -x "${$METEOR_HOME}/meteor"
 }
 
 build() {
