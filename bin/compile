@@ -8,7 +8,7 @@ PATH=$METEOR_HOME/usr/bin:$METEOR_HOME/usr/lib/meteor/bin:$PATH
 # Unfortunately heroku buildpacks don't let you pass parameters
 # to this script, so if you want to change the version of meteor,
 # you'll have to fork and hard-code this.
-METEOR_VERSION=0.5.9
+METEOR_VERSION=1.0.2.1
 
 fetch_meteor() {
   if [ -f "$METEOR_HOME/usr/bin/meteor" ] ; then
