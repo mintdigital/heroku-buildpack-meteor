@@ -24,9 +24,9 @@ fetch_meteor() {
   fi
 
   echo "Fetching meteor package"
-  TARBALL_URL="https://d3sqy0vbqsdhku.cloudfront.net/packages-bootstrap/${METEOR_VERSION}/meteor-bootstrap-os.linux.x86_64.tar.gz"
   PACKAGE="$CACHE_DIR/meteor-$METEOR_VERSION.tar.gz"
-  curl -o "$PACKAGE" "$TARBALL_URL"
+  TARBALL_URL="https://d3sqy0vbqsdhku.cloudfront.net/packages-bootstrap/${METEOR_VERSION}/meteor-bootstrap-os.linux.x86_64.tar.gz"
+  [ ! -e "$PACKAGE" ] && curl -o "$PACKAGE" "$TARBALL_URL"
 
   echo "Unpacking meteor"
   [ ! -d "$METEOR_HOME" ] && mkdir -p "$METEOR_HOME"
