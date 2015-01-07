@@ -53,9 +53,8 @@ build() {
     meteor remove-platform android 2>&1 | indent
     meteor build ../build --directory 2>&1 | indent
     head "Installing App's NPM Dependencies"
-    (cd .build/bundle/programs/server && npm install | indent)
-    cd $BUILD_DIR
-    rm -rf $APP_SOURCE
+    (cd ../build/bundle/programs/server && npm install | indent)
+    cd $BUILD_DIR && rm -rf $APP_SOURCE
   )
 }
 
