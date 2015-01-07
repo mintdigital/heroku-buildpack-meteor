@@ -8,5 +8,5 @@ cat <<-YAML
 addons:
   - mongolab:sandbox
 default_process_types:
-  web: node .build/bundle/main.js
+  web: node build/bundle/main.js
 YAML

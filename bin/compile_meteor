@@ -10,6 +10,7 @@ set -e            # fail fast
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
+APP_SOURCE=$BUILD_DIR/app_src
 METEOR_HOME=$BUILD_DIR/.meteor_tool
 PATH=$METEOR_HOME:$BUILD_DIR/.heroku/node/bin:$PATH
 bp_dir=$(cd $(dirname $0); cd ..; pwd)
@@ -35,19 +36,20 @@ fetch_meteor() {
 
   head "Unpacking Meteor $METEOR_VERSION"
   [ ! -d "$METEOR_HOME" ] && mkdir -p "$METEOR_HOME"
-  tar -xzf "$PACKAGE" -C "$HOME"
+  tar -xzf "$PACKAGE" -C "$BUILD_DIR"
+  mv "$BUILD_DIR/.meteor" "$METEOR_HOME"
   # bomb out if it didn't work, eg no net
   test -x "${METEOR_HOME}/meteor"
 }
 
 build() {
   (
-    cd $BUILD_DIR
+    cd $APP_SOURCE
     head "Building Meteor App Bundle"
     # can't build with these platforms enabled, it looks like
     meteor remove-platform ios | indent
     meteor remove-platform android | indent
-    meteor build .build --directory | indent
+    meteor build ../build --directory | indent
     head "Installing App's NPM Dependencies"
     (cd .build/bundle/programs/server && npm install | indent)
   )
