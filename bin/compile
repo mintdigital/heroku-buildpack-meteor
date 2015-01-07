@@ -9,14 +9,14 @@ source $bp_dir/bin/common.sh
 # Move the Meteor's app source into a subdirectory
 (
   head "Moving app source into a subdirectory"
-  echo "DEBUG BEFORE MOVE" `ls -aR $1`
+  echo "DEBUG BEFORE MOVE" `ls -a $1`
   cd $1
   mkdir ../app_src
   # the shopt makes the * glob catch .files
   shopt -s dotglob nullglob
   mv * ../app_src
   mv ../app_src ./app_src
-  echo "DEBUG AFTER MOVE" `ls -aR $1`
+  echo "DEBUG AFTER MOVE" `ls -a $1`
 )
 
 
