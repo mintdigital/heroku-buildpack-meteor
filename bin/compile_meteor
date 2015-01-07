@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# USAGE: bin/compile_meteor <build-dir> <cache-dir>
+# USAGE: bin/compile_meteor <build-dir> <cache-dir> <env-dir>
 
 ####### Configure environment
 

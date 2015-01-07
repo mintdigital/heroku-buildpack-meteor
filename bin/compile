@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# USAGE: bin/compile <build-dir> <cache-dir>
+# USAGE: bin/compile <build-dir> <cache-dir> <env-dir>
 
 bp_dir=$(cd $(dirname $0); cd ..; pwd)
 
