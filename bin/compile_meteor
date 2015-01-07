@@ -26,7 +26,7 @@ fetch_meteor() {
   (
     cd $CACHE_DIR
     old_files=`find . -depth 1 -name "meteor-*.tar.gz" -not -name "meteor-$METEOR_VERSION.tar.gz"`
-    for f in $old_files; do; rm $f; done
+    for f in $old_files; do rm $f; done
   )
 
   head "Fetching Meteor $METEOR_VERSION"
