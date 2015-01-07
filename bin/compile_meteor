@@ -5,30 +5,35 @@
 
 set -e            # fail fast
 
-###### NEEDED VARIABLES
+###### NEEDED VARIABLES/DIRECTORIES
 
 BUILD_DIR=$1
 CACHE_DIR=$2
-METEOR_HOME=$HOME/.meteor
+ENV_DIR=$3
+METEOR_HOME=$BUILD_DIR/.meteor_tool
 PATH=$METEOR_HOME:$BUILD_DIR/.heroku/node/bin:$PATH
+bp_dir=$(cd $(dirname $0); cd ..; pwd)
 
-# Unfortunately heroku buildpacks don't let you pass parameters
-# to this script, so if you want to change the version of meteor,
-# you'll have to fork and hard-code this.
+# There's no good way to determine 'latest' Meteor. We could do it from
+# the .meteor/release file, but this is easier for now and should work ok.
 METEOR_VERSION=1.0.2.1
 
+# Load some convenience functions like status(), echo(), and indent()
+source $bp_dir/bin/common.sh
+
 fetch_meteor() {
-  if [ -f "$METEOR_HOME/usr/bin/meteor" ] ; then
+  if [ -f "$METEOR_HOME/meteor" ] ; then
     # Skip if meteor is already fetched
+    echo "-----> `meteor --version` already installed"
     return
   fi
 
-  echo "------> Fetching Meteor $METEOR_VERSION"
+  echo "-----> Fetching Meteor $METEOR_VERSION"
   PACKAGE="$CACHE_DIR/meteor-$METEOR_VERSION.tar.gz"
   TARBALL_URL="https://d3sqy0vbqsdhku.cloudfront.net/packages-bootstrap/${METEOR_VERSION}/meteor-bootstrap-os.linux.x86_64.tar.gz"
   [ ! -e "$PACKAGE" ] && curl -o "$PACKAGE" "$TARBALL_URL"
 
-  echo "------> Unpacking Meteor $METEOR_VERSION"
+  echo "-----> Unpacking Meteor $METEOR_VERSION"
   [ ! -d "$METEOR_HOME" ] && mkdir -p "$METEOR_HOME"
   tar -xzf "$PACKAGE" -C "$HOME"
   # bomb out if it didn't work, eg no net
@@ -38,13 +43,13 @@ fetch_meteor() {
 build() {
   (
     cd $BUILD_DIR
-    echo "------> Building Meteor App Bundle"
+    echo "-----> Building Meteor App Bundle"
     # can't build with these platforms enabled, it looks like
-    meteor remove-platform ios
-    meteor remove-platform android
-    meteor build .build --directory
-    echo "------> Installing App's NPM Dependencies"
-    (cd .build/bundle/programs/server && npm install)
+    meteor remove-platform ios | indent
+    meteor remove-platform android | indent
+    meteor build .build --directory | indent
+    echo "-----> Installing App's NPM Dependencies"
+    (cd .build/bundle/programs/server && npm install | indent)
   )
 }
 
@@ -54,9 +59,8 @@ build() {
 fetch_meteor
 build
 
-echo "------> Checking for post_compile script"
 if [ -f $BUILD_DIR/bin/post_compile ] ; then
-    echo "------> Running post_compile hook"
+    echo "-----> Running post_compile hook"
     chmod +x $BUILD_DIR/bin/post_compile
     $BUILD_DIR/bin/post_compile
 fi
