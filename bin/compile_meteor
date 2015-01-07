@@ -41,7 +41,7 @@ fetch_meteor() {
   mv "$BUILD_DIR/.meteor" "$METEOR_HOME"
   echo "DID MV ls $BUILD_DIR" `ls -a $BUILD_DIR`
   # bomb out if it didn't work, eg no net
-  test -x "${METEOR_HOME}/meteor"
+  [ ! -x "${METEOR_HOME}/meteor"] && error "Install failed: No meteor bin found."
 }
 
 build() {
