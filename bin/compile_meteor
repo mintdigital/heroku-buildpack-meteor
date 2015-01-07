@@ -25,7 +25,7 @@ fetch_meteor() {
   # if there are old cached versions, we should delete them
   (
     cd $CACHE_DIR
-    old_files=`find . -depth 1 -name "meteor-*.tar.gz" -not -name "meteor-$METEOR_VERSION.tar.gz"`
+    old_files=`find . -maxdepth 1 -name 'meteor-*.tar.gz' -not -name "meteor-$METEOR_VERSION.tar.gz"`
     for f in $old_files; do rm $f; done
   )
 
