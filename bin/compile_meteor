@@ -35,7 +35,7 @@ fetch_meteor() {
   if [ ! -e "$PACKAGE" ]; then
     curl -o "$PACKAGE" "$TARBALL_URL" | indent
   else
-    info "using cached Meteor $METEOR_VERSION"
+    info "Using cached Meteor $METEOR_VERSION"
   fi
 
   head "Unpacking Meteor $METEOR_VERSION"
