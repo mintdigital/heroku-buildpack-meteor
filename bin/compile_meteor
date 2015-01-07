@@ -23,12 +23,12 @@ fetch_meteor() {
     return
   fi
 
-  echo "Fetching meteor package"
+  echo "------> Fetching Meteor $METEOR_VERSION"
   PACKAGE="$CACHE_DIR/meteor-$METEOR_VERSION.tar.gz"
   TARBALL_URL="https://d3sqy0vbqsdhku.cloudfront.net/packages-bootstrap/${METEOR_VERSION}/meteor-bootstrap-os.linux.x86_64.tar.gz"
   [ ! -e "$PACKAGE" ] && curl -o "$PACKAGE" "$TARBALL_URL"
 
-  echo "Unpacking meteor"
+  echo "------> Unpacking Meteor $METEOR_VERSION"
   [ ! -d "$METEOR_HOME" ] && mkdir -p "$METEOR_HOME"
   tar -xzf "$PACKAGE" -C "$HOME"
   # bomb out if it didn't work, eg no net
@@ -38,12 +38,12 @@ fetch_meteor() {
 build() {
   (
     cd $BUILD_DIR
-    echo "Building meteor bundle"
+    echo "------> Building Meteor App Bundle"
     # can't build with these platforms enabled, it looks like
     meteor remove-platform ios
     meteor remove-platform android
     meteor build .build --directory
-    echo "Installing app's npm dependencies"
+    echo "------> Installing App's NPM Dependencies"
     (cd .build/bundle/programs/server && npm install)
   )
 }
@@ -54,9 +54,9 @@ build() {
 fetch_meteor
 build
 
-echo "Checking for post_compile script"
+echo "------> Checking for post_compile script"
 if [ -f $BUILD_DIR/bin/post_compile ] ; then
-    echo "-----> Running post_compile hook"
+    echo "------> Running post_compile hook"
     chmod +x $BUILD_DIR/bin/post_compile
     $BUILD_DIR/bin/post_compile
 fi
