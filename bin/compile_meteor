@@ -15,24 +15,28 @@ METEOR_HOME=$BUILD_DIR/.meteor_tool
 PATH=$METEOR_HOME:$BUILD_DIR/.heroku/node/bin:$PATH
 bp_dir=$(cd $(dirname $0); cd ..; pwd)
 
-# There's no good way to determine 'latest' Meteor. We could do it from
-# the .meteor/release file, but this is easier for now and should work ok.
-METEOR_VERSION=1.0.2.1
-
 # Load some convenience functions like status(), echo(), and indent()
 source $bp_dir/bin/common.sh
 
 fetch_meteor() {
-  if [ -f "$METEOR_HOME/meteor" ] ; then
-    # Skip if meteor is already fetched
-    head "`meteor --version` already installed"
-    return
-  fi
+  # We determine the desired Meteor version from .meteor/release
+  METEOR_VERSION=`cat "$APP_SOURCE/.meteor/release" | sed 's/METEOR@//'`
+
+  # if there are old cached versions, we should delete them
+  (
+    cd $CACHE_DIR
+    old_files=`find . -depth 1 -name "meteor-*.tar.gz" -not -name "meteor-$METEOR_VERSION.tar.gz"`
+    for f in $old_files; do; rm $f; done
+  )
 
   head "Fetching Meteor $METEOR_VERSION"
   PACKAGE="$CACHE_DIR/meteor-$METEOR_VERSION.tar.gz"
   TARBALL_URL="https://d3sqy0vbqsdhku.cloudfront.net/packages-bootstrap/${METEOR_VERSION}/meteor-bootstrap-os.linux.x86_64.tar.gz"
-  [ ! -e "$PACKAGE" ] && curl -o "$PACKAGE" "$TARBALL_URL"
+  if [ ! -e "$PACKAGE" ]; then
+    curl -o "$PACKAGE" "$TARBALL_URL" | indent
+  else
+    info "using cached Meteor $METEOR_VERSION"
+  fi
 
   head "Unpacking Meteor $METEOR_VERSION"
   tar -xzf "$PACKAGE" -C "$BUILD_DIR"
