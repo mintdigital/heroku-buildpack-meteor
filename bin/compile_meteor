@@ -39,10 +39,12 @@ build() {
   (
     cd $BUILD_DIR
     echo "Building meteor bundle"
-    # can't 'build' with these platforms enabled, it looks like
+    # can't build with these platforms enabled, it looks like
     meteor remove-platform ios
     meteor remove-platform android
     meteor build app_build --directory
+    echo "Installing app's npm dependencies"
+    (cd app_build/bundle/programs/server && npm install)
   )
 }
 
