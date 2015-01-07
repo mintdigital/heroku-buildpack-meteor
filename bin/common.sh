@@ -11,6 +11,7 @@ head() {
 debug() {
   # Uncomment this when you need to debug things during the build
   # echo "DEBUG $*"
+  : # null command to prevent bash syntax error when not using
 }
 
 info() {
