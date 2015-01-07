@@ -25,7 +25,7 @@ source $bp_dir/bin/common.sh
 fetch_meteor() {
   if [ -f "$METEOR_HOME/meteor" ] ; then
     # Skip if meteor is already fetched
-    echo "-----> `meteor --version` already installed"
+    head "`meteor --version` already installed"
     return
   fi
 
@@ -35,9 +35,11 @@ fetch_meteor() {
   [ ! -e "$PACKAGE" ] && curl -o "$PACKAGE" "$TARBALL_URL"
 
   head "Unpacking Meteor $METEOR_VERSION"
-  [ ! -d "$METEOR_HOME" ] && mkdir -p "$METEOR_HOME"
+  echo "ls $BUILD_DIR" `ls -a $BUILD_DIR`
   tar -xzf "$PACKAGE" -C "$BUILD_DIR"
+  echo "UNPACKED ls $BUILD_DIR" `ls -a $BUILD_DIR`
   mv "$BUILD_DIR/.meteor" "$METEOR_HOME"
+  echo "DID MV ls $BUILD_DIR" `ls -a $BUILD_DIR`
   # bomb out if it didn't work, eg no net
   test -x "${METEOR_HOME}/meteor"
 }
