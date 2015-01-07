@@ -52,6 +52,8 @@ build() {
     meteor build ../build --directory | indent
     head "Installing App's NPM Dependencies"
     (cd .build/bundle/programs/server && npm install | indent)
+    cd $BUILD_DIR
+    rm -rf $APP_SOURCE
   )
 }
 
