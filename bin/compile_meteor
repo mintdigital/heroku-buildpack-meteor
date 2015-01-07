@@ -10,7 +10,7 @@ set -e            # fail fast
 BUILD_DIR=$1
 CACHE_DIR=$2
 METEOR_HOME=$HOME/.meteor
-PATH=$METEOR_HOME:$PATH
+PATH=$METEOR_HOME:$BUILD_DIR/.heroku/node/bin:$PATH
 
 # Unfortunately heroku buildpacks don't let you pass parameters
 # to this script, so if you want to change the version of meteor,
@@ -42,9 +42,9 @@ build() {
     # can't build with these platforms enabled, it looks like
     meteor remove-platform ios
     meteor remove-platform android
-    meteor build app_build --directory
+    meteor build .build --directory
     echo "Installing app's npm dependencies"
-    (cd app_build/bundle/programs/server && npm install)
+    (cd .build/bundle/programs/server && npm install)
   )
 }
 
