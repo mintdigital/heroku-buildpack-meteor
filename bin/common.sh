@@ -8,6 +8,11 @@ head() {
   echo "-----> $*"
 }
 
+debug() {
+  # Uncomment this when you need to debug things during the build
+  # echo "DEBUG $*"
+}
+
 info() {
   #echo "`date +\"%M:%S\"`  $*"
   echo "       $*"
