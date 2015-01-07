@@ -43,15 +43,21 @@ fetch_meteor() {
   mv "$BUILD_DIR/.meteor" "$METEOR_HOME"
   # bomb out if it didn't work, eg no net
   [ ! -x "${METEOR_HOME}/meteor" ] && error "Install failed: No meteor bin found."
+  info "Meteor $METEOR_VERSION is installed"
 }
 
 build() {
   (
-    cd $APP_SOURCE
     head "Building Meteor App Bundle"
+    cd $APP_SOURCE
+    debug "we are in " `pwd`
     # can't build with these platforms enabled, it looks like
+    debug `meteor --version`
+    debug "removing ios"
     meteor remove-platform ios 2>&1 | indent
+    debug "removing android"
     meteor remove-platform android 2>&1 | indent
+    debug "performing build"
     meteor build ../build --directory 2>&1 | indent
     head "Installing App's NPM Dependencies"
     (cd ../build/bundle/programs/server && npm install | indent)
