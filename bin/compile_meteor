@@ -48,6 +48,19 @@ fetch_meteor() {
 
 build() {
   (
+    head "Creating runtime environment"
+    mkdir -p $BUILD_DIR/.profile.d
+    node_home=.meteor_tool/packages/meteor-tool/1.0.38/meteor-tool-os.linux.x86_64/dev_bundle
+    echo "export PATH=\"\$HOME/$node_home/bin:\$PATH\"" > $BUILD_DIR/.profile.d/nodejs.sh
+    echo "export NODE_HOME=\"\$HOME/$node_home/\"" >> $BUILD_DIR/.profile.d/nodejs.sh
+    # and need these in current env right now as well
+    PATH="$BUILD_DIR/$node_home/bin:$PATH"
+    NODE_HOME="$BUILD_DIR/$node_home/"
+
+    echo "current path is " $PATH
+    echo "current NODE_HOME is " $NODE_HOME
+    echo "which npm is " `which npm`
+
     head "Building Meteor App Bundle"
     cd $APP_SOURCE
     # can't build with these platforms enabled, it looks like
